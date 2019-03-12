@@ -6,11 +6,19 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@babel/core": "^7.3.4",
+    "@emotion/core": "^10.0.9",
+    "@emotion/styled": "^10.0.9",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
+    "docutils-react": "^0.2.5",
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
-    "morgan": "~1.9.0"
+    "morgan": "~1.9.0",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "sax": "^1.2.4",
+    "serve-static": "^1.13.2"
   }
 }
