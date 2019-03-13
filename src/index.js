@@ -3,6 +3,11 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var DocsViewer = require('./docs').default;
 
-var App = (props) => <DocsViewer/>
+var re = /^\/xml\/(.*)$/
+var result = re.exec(document.location.pathname)
+var docName = result[1];
 
-ReactDOM.render(<App/>, document.getElementById('root'))
+
+var App = (props) => <DocsViewer {...props}/>
+
+    ReactDOM.hydrate(<App baseHref={document.location.href} docName={docName}/>, document.getElementById('root'))

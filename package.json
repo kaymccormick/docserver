@@ -30,6 +30,7 @@
     "@babel/plugin-transform-regenerator": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
     "@babel/preset-react": "^7.0.0",
+    "beefy": "^2.1.8",
     "browserify": "^16.2.3",
     "grunt": "^1.0.3",
     "grunt-babel": "^8.0.0",

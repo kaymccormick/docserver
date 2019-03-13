@@ -11,7 +11,7 @@ export default class Viewer extends React.Component {
 	const { server } = props;
 	return new Promise((resolve, reject) => {
 	    const parser = Viewer.getDocumentParser({ server, resolve, reject });
-	    Viewer.getDocumentStream({ server, parser, docName:props.docName })
+	    Viewer.getDocumentStream({ server, parser, ...props })
 		    .then((stream) => Viewer.handleDocumentStream({ server, stream, parser }))
 		    .catch(reject);
 	});
@@ -30,14 +30,15 @@ export default class Viewer extends React.Component {
 	const {server} = this.props;
 	if(!server) {
 	    console.log('here')
-	    Viewer.loadDocument({server, docName: 'index'})
+	    Viewer.loadDocument({server, docName: this.props.docName, baseHref: this.props.baseHref })
 		.then(({component}) => this.setState({component}))
 		.catch(err => console.log(err.stack));
 	}
     }
 
     static getDocumentUrl(props) {
-	return `http://melon.heptet.us:3000/static/xml/${props.docName}.xml`;
+	return new URL(`/static/xml/${props.docName}.xml`, props.baseHref)
+
     }
 
     static nodeStreamReader(stream, parser) {
@@ -55,7 +56,7 @@ export default class Viewer extends React.Component {
 		break;
             }
             const val = new TextDecoder("utf-8").decode(value);
-	    console.log(val);
+//	    console.log(val);
 	    parser.write(val);
 	}
     }
@@ -126,6 +127,6 @@ export default class Viewer extends React.Component {
     }
 
     render() {
-	return React.isValidElement(this.state.component) ? <div>{this.state.component}</div> : <div>invalid compoment</div>;
+	return React.isValidElement(this.state.component) ? <div>{this.state.component}</div> : null;
     }
 }
