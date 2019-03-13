@@ -34,12 +34,12 @@ function handleDocumentStream({stream, parser}) {
     stream.setEncoding('utf8');
     stream.on('readable', () => streamReader(stream, parser));
     return new Promise((resolve, reject) => {
-	stream.on('end', () => { parser.close(); resolve({o: true});});
+	stream.on('end', () => { parser.close(); resolve({o: true});}); 
     });
 }
 
 function getDocumentStream(props) {
-    return Promise.resolve(fs.createReadStream(path.resolve('./static/xml', props.docName + '.xml')));
+    return Promise.resolve(fs.createReadStream(path.resolve('./static/static/xml', props.docName + '.xml')));
 }
 
 /* GET home page. */
@@ -48,13 +48,18 @@ router.get('/:xmlFile', async function(req, res, next) {
 	var parser = getDocumentParser({ resolve, reject});
 	var docName = req.params.xmlFile;
 	return getDocumentStream({ parser, docName})
-	    .then((stream) => handleDocumentStream({ stream, parser }));
+	    .then((stream) => {
+		if(!stream) {
+		} else {
+		    handleDocumentStream({ stream, parser });
+		}
+	    }).catch(reject);
     }).then(o => ReactDOMServer.renderToStaticMarkup(o.component))
 	.then(markup => {
-	    console.log('markup: ' + markup);
-	    res.render('index', { markup });
-	})
-	.catch(reject);
+	    res.render('doc', { title:'', markup });
+	}).catch(err => {
+	    console.log(err.stack);
+	});
 });
 
 module.exports = router;
