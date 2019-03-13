@@ -28,6 +28,9 @@ export default class Viewer extends React.Component {
     componentDidMount()
     {
 	const {server} = this.props;
+	if(this.props.component) {
+	    return;
+	}
 	if(!server) {
 	    console.log('here')
 	    Viewer.loadDocument({server, docName: this.props.docName, baseHref: this.props.baseHref })
@@ -127,6 +130,6 @@ export default class Viewer extends React.Component {
     }
 
     render() {
-	return React.isValidElement(this.state.component) ? <div>{this.state.component}</div> : null;
+	return React.isValidElement(this.state.component) ? this.state.component : null;
     }
 }

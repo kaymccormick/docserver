@@ -7,6 +7,7 @@ var promisify = require('util').promisify;
 var open = promisify(fs.open);
 var path = require('path');
 var React = require('react');
+var App = require('../lib/App').default;
 
 function getDocumentParser({ resolve, reject }) {
     var context = {};
@@ -23,18 +24,19 @@ function getDocumentParser({ resolve, reject }) {
     return parser;
 }
 
-function streamReader(stream, parser) {
+function streamReader({stream, parser, output}) {
     var chunk;
     while(null !== (chunk = stream.read())) {
         parser.write(chunk);
+	output.data = output.data + chunk;
     }
 }
 
-function handleDocumentStream({stream, parser}) {
+function handleDocumentStream({stream, parser, output}) {
     stream.setEncoding('utf8');
-    stream.on('readable', () => streamReader(stream, parser));
+    stream.on('readable', () => streamReader({stream, parser, output}));
     return new Promise((resolve, reject) => {
-	stream.on('end', () => { parser.close(); resolve({o: true});}); 
+	stream.on('end', () => { parser.close(); resolve({output});}); 
     });
 }
 
@@ -44,6 +46,7 @@ function getDocumentStream(props) {
 
 /* GET home page. */
 router.get('/:xmlFile', async function(req, res, next) {
+    const output = { data: '' };
     return new Promise((resolve, reject) => {
 	var parser = getDocumentParser({ resolve, reject});
 	var docName = req.params.xmlFile;
@@ -51,12 +54,16 @@ router.get('/:xmlFile', async function(req, res, next) {
 	    .then((stream) => {
 		if(!stream) {
 		} else {
-		    handleDocumentStream({ stream, parser });
+		    handleDocumentStream({ stream, parser, output }).then(o => {
+			console.log(o);
+		    });
 		}
 	    }).catch(reject);
-    }).then(o => ReactDOMServer.renderToStaticMarkup(o.component))
-	.then(markup => {
-	    res.render('doc', { title:'', markup });
+    }).then(o => {
+	var app = React.createElement(App, { component: o.component });
+	return ReactDOMServer.renderToStaticMarkup(app);
+    }).then(markup => {
+	res.render('doc', { title:'', markup, xml: output.data });
 	}).catch(err => {
 	    console.log(err.stack);
 	});

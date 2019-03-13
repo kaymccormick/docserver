@@ -19,6 +19,7 @@ module.exports = function(grunt) {
 		files: {
 		    'lib/index.js': 'src/index.js',
 		    'lib/docs.js': 'src/docs.js',
+		    'lib/App.js': 'src/App.js',
 		},
 	    },
 	},
