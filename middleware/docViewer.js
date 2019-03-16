@@ -5,6 +5,9 @@ var path = require('path');
 var React = require('react');
 var App = require('../lib/App').default;
 
+/**
+ *
+ */
 function getDocumentParser({ resolve, reject }) {
     var context = {};
     var { parser } = setupSaxParser({context});
@@ -20,6 +23,9 @@ function getDocumentParser({ resolve, reject }) {
     return parser;
 }
 
+/**
+ *
+ */
 function streamReader({stream, parser, output}) {
     var chunk;
     while(null !== (chunk = stream.read())) {
@@ -28,6 +34,9 @@ function streamReader({stream, parser, output}) {
     }
 }
 
+/**
+ *
+ */
 function handleDocumentStream({stream, parser, output}) {
     stream.setEncoding('utf8');
     stream.on('readable', () => streamReader({stream, parser, output}));
@@ -36,10 +45,17 @@ function handleDocumentStream({stream, parser, output}) {
     });
 }
 
+/**
+ *
+ */
 function getDocumentStream(options) {
-    return (props) => Promise.resolve(fs.createReadStream(path.resolve(options.docPath, props.docName + '.xml')));
+    return (props) => Promise.resolve(fs.createReadStream(path.resolve(options.docPath,
+								       props.docName + '.xml')));
 }
 
+/**
+ *
+ */
 module.exports = function(options) {
     return async function(req, res, next) {
 	const output = { data: '' };
@@ -60,7 +76,11 @@ module.exports = function(options) {
 	    var app = React.createElement(App, { component: o.component });
 	    return ReactDOMServer.renderToStaticMarkup(app);
 	}).then(markup => {
-	    res.render('doc', { title:'', markup, xml: output.data });
+	    res.render('doc', { title:'',
+				markup,
+				xml: output.data,
+				entry: "/bundle.js",
+			      } );
 	}).catch(err => {
 	    console.log(err.stack);
 	});
