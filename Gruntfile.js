@@ -17,13 +17,13 @@ module.exports = function(grunt) {
 	    },
 	    doc: {
 		files: "doc/*",
-		tasks: ["sphinx_plugin:xmlDoc", "sphinx_plugin:htmlDoc"],
+		tasks: ["sphinxBuild:xmlDoc", "sphinxBuild:htmlDoc"],
 		options: {
 		    livereload: true,
 		},
 	    }
 	},
-	"sphinx_plugin": {
+	"sphinxBuild": {
 	    xmlDoc: {
 		options: {
 		    sourceRoot: 'doc',
@@ -78,6 +78,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-browserify');
 
     // Default task(s).
-    grunt.registerTask('default', ['babel', 'browserify', 'uglify', 'sphinx_plugin:xmlDoc']);
+    grunt.registerTask('default', ['babel', 'browserify', 'uglify', 'sphinxBuild:xmlDoc']);
 
 };
