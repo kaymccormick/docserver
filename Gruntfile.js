@@ -40,9 +40,19 @@ module.exports = function(grunt) {
 	    }
 	},
 	browserify: {
-	    "dist/bundle.js": 'lib/index.js',
-	    options: {
-		debug: true,
+	    doc: {
+		src: ['lib/doc.js'],
+		dest: 'dist/docbundle.js',
+		options: {
+		    debug: true,
+		},
+	    },
+	    publish: {
+		src: ['lib/publish.js'],
+		dest: 'dist/pubbundle.js',
+		options: {
+		    debug: true,
+		},
 	    },
 	},
 	babel: {
@@ -52,11 +62,10 @@ module.exports = function(grunt) {
 		plugins: ["@babel/plugin-transform-regenerator"],
 	    },
 	    dist: {
-		files: {
-		    'lib/index.js': 'src/index.js',
-		    'lib/docs.js': 'src/docs.js',
-		    'lib/App.js': 'src/App.js',
-		},
+		cwd: 'src',
+		expand: true,
+		src: ['**/*.js'],
+		dest: 'lib',
 	    },
 	},
 	uglify: {
