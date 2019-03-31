@@ -11,7 +11,6 @@ pipeline {
 		sh 'rm -rf node_modules/docutils-js'
 		sh 'mkdir -p node_modules/docutils-js'
 		sh 'wget -O - https://jenkins.heptet.us/job/github/job/docutils-js/job/master/lastSuccessfulBuild/artifact/build/docutils-js.tar.gz | tar -zxf - -C node_modules/docutils-js'
-tar -zxf - -C node_modules/docutils-react'
 		sh 'rm -rf node_modules/docutils-serve'
 		sh 'mkdir -p node_modules/docutils-serve'
 		sh 'wget -O - https://jenkins.heptet.us/job/github/job/docutils-serve/job/master/lastSuccessfulBuild/artifact/build/docutils-serve.tar.gz | tar -zxf - -C node_modules/docutils-serve'
