@@ -23,6 +23,7 @@
     "node-fetch": "^2.3.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
+    "react-modal": "^3.8.1",
     "react-rte": "^0.16.1",
     "react-star-rating": "^1.4.2",
     "sax": "^1.2.4",
