@@ -8,6 +8,7 @@ var DocsViewer = require('./docs').default;
 import { Publisher, publishCmdLine } from 'docutils-js/lib/Core'
 import { newDocument } from 'docutils-js/lib/utils'
 import { StringInput, StringOutput } from 'docutils-js/lib/io'
+import baseSettings from 'docutils-js/lib/baseSettings';
 
 const args = { readerName: 'standalone',
 	       parserName: 'restructuredtext',
@@ -19,7 +20,7 @@ const args = { readerName: 'standalone',
 const { readerName, parserName, writerName } = args;
 const source = new StringInput({source: "test"})
 const destination = new StringOutput({})
-const settings = {}
+const settings = baseSettings;
 const pub = new Publisher({source, destination, settings});
 pub.setComponents(readerName, parserName, writerName);
 pub.publish({}, () => {

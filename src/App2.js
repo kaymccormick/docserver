@@ -5,6 +5,7 @@ import { StringInput, StringOutput } from 'docutils-js/lib/io'
 import DocsViewer from './docs2';
 import { getComponentForXmlSync } from 'docutils-react/lib/getComponentForXmlSax'
 import Modal from 'react-modal';
+import baseSettings from 'docutils-js/lib/baseSettings';
 
 const customStyles = {
     content : {
@@ -62,7 +63,7 @@ export default class extends React.Component {
 	}
 	const source = new StringInput({source: this.state.input})
 	const destination = new StringOutput({})
-	const settings = {}
+	const settings = baseSettings;
 	const pub = new Publisher({source, destination, settings});
 	pub.setComponents(readerName, parserName, writerName);
 	pub.publish({}, (error) => {
@@ -119,8 +120,8 @@ export default class extends React.Component {
 	    <div>{(this.state.error ? this.state.error.stack.split('\n').map(x => <div>{x}</div>) : null)}</div>
             <button onClick={this.closeModal}>close</button>
             </Modal>
-	    <form><div style={{display: 'grid', gridColumnGap: '10px', gridTemplateColumns: '1fr 1fr'}}>
-	    <div>
+	    <form><div style={{display: 'grid', gridColumnGap: '10px', gridTemplateRows: '1fr 1fr', gridTemplateColumns: '1fr 1fr'}}>
+	    <div style={{gridColumn: '1', gridRow: '1'}}>
 	    <div>
 <button onClick={this.handleSectionClick}>Section</button>
 	    <button onClick={(e) => { this.publish(); e.preventDefault(); }}>Publish</button>
@@ -130,7 +131,7 @@ export default class extends React.Component {
 	    </fieldset>
 	    </div>
 	    </div>
-	    <div style={{fontFamily: 'monospace', whiteSpace: 'pre'}}>{this.state.output}</div><div>{this.state.component}</div></div></form></div>;
+	    <div style={{gridColumn: '2', gridRow: '1 / 3', fontFamily: 'monospace', whiteSpace: 'pre-wrap'}}>{this.state.output}</div><div style={{gridColumn: '1', gridRow: '2'}}>{this.state.component}</div></div></form></div>;
     }
 }
 
