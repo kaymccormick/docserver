@@ -7,6 +7,7 @@ const logger = require('morgan');
 const compression = require('compression');
 const docRouter = require('./routes/doc.js');
 const publishRouter = require('./routes/publish.js');
+var bodyParser = require('body-parser')
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(bodyParser.text({type: '*/*'}));
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use(express.static(path.join(__dirname, 'static')));
 app.use('/doc-html', express.static(path.join(__dirname, 'doc-html')));
