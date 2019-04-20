@@ -8,6 +8,7 @@ const compression = require('compression');
 const docRouter = require('./routes/doc.js');
 const publishRouter = require('./routes/publish.js');
 var bodyParser = require('body-parser')
+var fileUpload = require('express-fileupload');
 
 const app = express();
 
@@ -16,10 +17,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
+app.use(fileUpload({limits: 512 * 1024}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(bodyParser.text({type: '*/*'}));
+app.use(bodyParser.text({type: 'text/*'}));
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use(express.static(path.join(__dirname, 'static')));
 app.use('/doc-html', express.static(path.join(__dirname, 'doc-html')));
