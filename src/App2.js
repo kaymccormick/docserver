@@ -43,10 +43,10 @@ export default class extends React.Component {
 
     onTimeout()
     {
-	if((this.state.publishTime == null || (Date.now() - this.state.publishTime > 250)) && (this.state.inputModifiedTime > this.state.publishTime)) {
+/*	if((this.state.publishTime == null || (Date.now() - this.state.publishTime > 250)) && (this.state.inputModifiedTime > this.state.publishTime)) {
 	    this.publish();
 	}
-	setTimeout(this.onTimeout.bind(this), 500);
+	setTimeout(this.onTimeout.bind(this), 500);*/
     }
 
     publish() {
@@ -82,7 +82,7 @@ export default class extends React.Component {
     }
 
     componentDidMount() {
-	this.timer = setTimeout(this.onTimeout.bind(this), 1500);
+//	this.timer = setTimeout(this.onTimeout.bind(this), 1500);
     }
 
     openModal() {

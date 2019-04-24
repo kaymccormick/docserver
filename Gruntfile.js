@@ -1,5 +1,9 @@
 module.exports = function(grunt) {
-
+    prod = false;
+    if(process.env.NODE_ENV === 'production') {
+	prod = true;
+    }
+	
     // Project configuration.
     grunt.initConfig({
 	pkg: grunt.file.readJSON('package.json'),
@@ -44,20 +48,27 @@ module.exports = function(grunt) {
 		src: ['lib/doc.js'],
 		dest: 'dist/docbundle.js',
 		options: {
-		    debug: true,
+		    debug: !prod,
 		},
 	    },
 	    publish: {
 		src: ['lib/publish.js'],
 		dest: 'dist/pubbundle.js',
 		options: {
-		    debug: true,
+		    debug: !prod,
+		},
+	    },
+	    editor: {
+		src: ['lib/editor.js'],
+		dest: 'dist/editorbundle.js',
+		options: {
+		    debug: !prod,
 		},
 	    },
 	},
 	babel: {
 	    options: {
-		sourceMap: true,
+		sourceMap: !prod,
 		presets: ["@babel/preset-env", "@babel/preset-react"],
 		plugins: ["@babel/plugin-transform-regenerator"],
 	    },

@@ -24,6 +24,11 @@ const defaultArgs = {
     enableExitStatus: true,
 };
 
+
+router.get('/editor', (req, res, next) => {
+    res.render('editor', { entry: '/editorbundle.js'})
+})
+
 router.get('/upload', (req, res, next) => {
     res.render('upload');
     return;
