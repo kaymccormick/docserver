@@ -1,11 +1,10 @@
 require('@babel/polyfill')
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var Editor = require('./Editor').default;
+const React = require('react');
+const ReactDOM = require('react-dom');
+const Editor = require('./Editor').default;
 
-root = document.getElementById('root');
-console.log(root);
+const root = document.getElementById('root');
 ReactDOM.hydrate(<Editor/>, root)
 
 

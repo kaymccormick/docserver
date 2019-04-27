@@ -1,29 +1,16 @@
-var express = require('express');
-var router = express.Router();
-var docutilsServe = require('docutils-serve');
-var path = require('path');
-var App = require('../lib/App').default;
-var docPath = path.join(__dirname, '../doc-xml')
-var React = require('react')
-var fs = require('fs');
-var path = require('path');
-var core = require('docutils-js/lib/Core');
-var sourceModule = require('docutils-js/lib/Sources');
-console.log(sourceModule);
-var ioModule = require('docutils-js/lib/io');
+const fs = require('fs');
+const express = require('express');
+const router = express.Router();
 
-const Parser = require('docutils-js/lib/parsers/restructuredtext').Parser;
-const newDocument = require('docutils-js/lib/newDocument').default;
-const baseSettings = require('docutils-js/lib/baseSettings').default;
+const React = require('react')
 
-const defaultArgs = {
-    readerName: 'standalone',
-    parserName: 'restructuredtext',
-    usage: '',
-    description: '',
-    enableExitStatus: true,
-};
+const docutilsServe = require('docutils-serve');
+const path = require('path');
+const App = require('../lib/App').default;
+const docPath = path.join(__dirname, '../doc-xml')
 
+const parse = require('docutils-js').parse;
+const baseSettings = require('docutils-js').baseSettings;
 
 router.get('/editor', (req, res, next) => {
     res.render('editor', { entry: '/editorbundle.js'})

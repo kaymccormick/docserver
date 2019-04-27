@@ -31,6 +31,7 @@
     "react-modal": "^3.8.1",
     "react-rte": "^0.16.1",
     "react-star-rating": "^1.4.2",
+    "rollup": "^1.10.1",
     "sax": "^1.2.4",
     "serve-static": "^1.13.2"
   },
