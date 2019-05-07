@@ -4,7 +4,8 @@ const router = express.Router();
 
 const React = require('react')
 
-const docutilsServe = require('docutils-serve');
+const docutilsServe = require('../middleware/docutilsServe');
+
 const path = require('path');
 const App = require('../lib/App').default;
 const docPath = path.join(__dirname, '../doc-xml')

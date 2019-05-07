@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-Editor, EditorState, ContentState, Modifier, convertFromHTML, RichUtils,
+Editor, EditorState, ContentState, Modifier, convertFromHTML, RichUtils, getDefaultKeyBinding
 } from 'draft-js';
 
 /* Some code taken from the 'rich' example in the draft-js source code
@@ -118,7 +118,7 @@ export default class MyEditor extends React.Component {
     this.state = { editorState: EditorState.createEmpty() };
       this.onChange = editorState => this.setState({ editorState });
       this.handleSectionClick = this.handleSectionClick.bind(this);
-      this.handleDebugClick = this.handleDebugClick.bind(this);
+      this.handleDebugClick = this._handleDebugClick.bind(this);
       this.toggleBlockType = this._toggleBlockType.bind(this);
       this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
       this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -126,10 +126,15 @@ export default class MyEditor extends React.Component {
 
   }
 
-    handleDebugClick() {
+    _handleDebugClick() {
         const contentState = this.state.editorState.getCurrentContent();
-        const blockMap = contentState.getBlockMap();
-        console.log(blockMap.toJSON());
+        const blockMap = contentState.getBlockMap().toJS();
+        console.log(blockMap);
+        Object.entries(blockMap).forEach(([k, v]) => {
+            Object.entries(v).forEach(([k2, v2]) => {
+                console.log(`level 2: ${k2} = ${v2}`);
+            });
+        });
     }
 
     handleSectionClick() {
@@ -199,7 +204,8 @@ export default class MyEditor extends React.Component {
             }
         }
           return (
-            <div className="RichEditor-root">
+                  <div className="RichEditor-root">
+                  <button onClick={this.handleDebugClick}>Debug</button>
               <BlockStyleControls
                 editorState={editorState}
                 onToggle={this.toggleBlockType}
