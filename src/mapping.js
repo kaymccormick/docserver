@@ -3,7 +3,5 @@ exports.default = {
 	path: '/editor',
 	entry: '/editorbundle.js',
 	view: 'editor',
-    }
+    },
 };
-
-	

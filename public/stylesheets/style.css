@@ -1,8 +1,38 @@
 body {
-  padding: 50px;
+    margin: 0px;
+    padding: 0px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #83C9A7;
+
+  /* #7800B0
+#FFD685
+#E8BDFC
+#83C9A7
+#004222
+*/
+/*-webkit-text-stroke-width: .1px;
+-webkit-text-stroke-color: black;*/
+}
+
+header > h1 { margin: 0px; }
+header {
+    margin: 0px;
+    padding: 1rem;
+    background-color: #004422;
+    color: #E8BDFC;
+}
+div.main,main {
+    /*border: 1.5px inset #83C9A7;*/
+    padding: .6rem;
+    /*background-color: #83C9A7;*/
+
+    color: #7800B0;
 }
 
 a {
   color: #00B7FF;
+}
+
+header {
+    padding-left: 3rem;
 }

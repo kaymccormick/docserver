@@ -1,8 +1,7 @@
-require('@babel/polyfill')
+require('@babel/polyfill');
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var App2 = require('./App2').default;
+const React = require('react');
+const ReactDOM = require('react-dom');
+const App2 = require('./App2').default;
 
-ReactDOM.hydrate(<App2/>, document.getElementById('root'))
-
+ReactDOM.hydrate(<App2/>, document.getElementById('root'));

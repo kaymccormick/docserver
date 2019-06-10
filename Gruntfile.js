@@ -3,7 +3,7 @@ module.exports = function(grunt) {
     if(process.env.NODE_ENV === 'production') {
 	prod = true;
     }
-	
+
     // Project configuration.
     grunt.initConfig({
 	pkg: grunt.file.readJSON('package.json'),
@@ -61,6 +61,13 @@ module.exports = function(grunt) {
 	    editor: {
 		src: ['lib/editor.js'],
 		dest: 'dist/editorbundle.js',
+		options: {
+		    debug: !prod,
+		},
+	    },
+	    editor2: {
+		src: ['lib/editor2.js'],
+		dest: 'dist/editorbundle2.js',
 		options: {
 		    debug: !prod,
 		},

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-Editor, EditorState, ContentState, Modifier, convertFromHTML, RichUtils, getDefaultKeyBinding
+Editor, EditorState, ContentState, Modifier, convertFromHTML, RichUtils, getDefaultKeyBinding,
 } from 'draft-js';
 
 /* Some code taken from the 'rich' example in the draft-js source code
@@ -123,7 +123,6 @@ export default class MyEditor extends React.Component {
       this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
       this.handleKeyCommand = this._handleKeyCommand.bind(this);
       this.mapKeyToEditorCommand = this._mapKeyToEditorCommand.bind(this);
-
   }
 
     _handleDebugClick() {
@@ -180,8 +179,8 @@ export default class MyEditor extends React.Component {
           this.onChange(
             RichUtils.toggleBlockType(
               this.state.editorState,
-              blockType
-            )
+              blockType,
+            ),
           );
         }
 
@@ -189,8 +188,8 @@ export default class MyEditor extends React.Component {
           this.onChange(
             RichUtils.toggleInlineStyle(
               this.state.editorState,
-              inlineStyle
-            )
+              inlineStyle,
+            ),
           );
         }
 

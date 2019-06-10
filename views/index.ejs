@@ -1,11 +1,16 @@
 <!DOCTYPE html>
+<% title = "Docutils Documentation Server" %>
 <html>
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <header>
+      <h1><%= title %></h1>
+      </header>
+    <main><p>Welcome to <%= title %></p>
+    <%- include('formStart') %>
+    </main>
   </body>
 </html>

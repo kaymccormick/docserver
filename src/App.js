@@ -2,31 +2,32 @@
  * Boilerplate container for the 'DocsViewer' component which does
  * some of the heavy lifting.
  */
-var React = require('react');
-var DocsViewer = require('./docs').default;
-//import { Parser } from 'docutils-js/lib/parsers/restructuredtext'
-import { Publisher, publishCmdLine } from 'docutils-js/lib/Core'
-import { newDocument } from 'docutils-js/lib/utils'
-import { StringInput, StringOutput } from 'docutils-js/lib/io'
-import baseSettings from 'docutils-js/lib/baseSettings';
+import {
+ defaults as baseSettings, StringInput, StringOutput, newDocument, Publisher,
+} from 'docutils-js';
 
-const args = { readerName: 'standalone',
+const React = require('react');
+const DocsViewer = require('./docs').default;
+
+const args = {
+ readerName: 'standalone',
 	       parserName: 'restructuredtext',
 	       usage: '',
 	       description: '',
 	       enableExitStatus: true,
-	       writerName: 'xml' };
+	       writerName: 'xml',
+};
 
 const { readerName, parserName, writerName } = args;
-const source = new StringInput({source: "test"})
-const destination = new StringOutput({})
+const source = new StringInput({ source: 'test' });
+const destination = new StringOutput({});
 const settings = baseSettings;
-const pub = new Publisher({source, destination, settings});
+const pub = new Publisher({ source, destination, settings });
 pub.setComponents(readerName, parserName, writerName);
 pub.publish({}, () => {
-    console.log(destination.destination)
+    console.log(destination.destination);
 });
 
-export default (props) => <div><h1>helo123</h1>
+export default props => <div><h1>helo123</h1>
     <DocsViewer {...props}/>
     </div>;

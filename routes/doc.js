@@ -1,25 +1,44 @@
 const fs = require('fs');
 const express = require('express');
+
 const router = express.Router();
 
 const React = require('react')
 
-const docutilsServe = require('../middleware/docutilsServe');
 
 const path = require('path');
-const App = require('../lib/App').default;
-const docPath = path.join(__dirname, '../doc-xml')
 
-const parse = require('docutils-js').parse;
-const baseSettings = require('docutils-js').baseSettings;
+const docPath = path.join(__dirname, '../doc-xml');
+
+const { RSTParser, parse, defaults, newDocument, StringInput, StringOutput, Publisher } = require('docutils-js');
+
+const baseSettings = defaults;
+const docutilsServe = require('../middleware/docutilsServe');
+const App = require('../lib/App').default;
+
+const defaultArgs = {
+    readerName: 'standalone',
+    parserName: 'restructuredtext',
+    usage: '',
+    description: '',
+    enableExitStatus: true,
+};
+
+router.get('/', (req, res, next) => {
+    res.render('index');
+});
 
 router.get('/editor', (req, res, next) => {
     res.render('editor', { entry: '/editorbundle.js'})
 })
 
+router.get('/editor2', (req, res, next) => {
+    res.render('editor', { entry: '/editorbundle2.js'})
+})
+
 router.get('/upload', (req, res, next) => {
     res.render('upload');
-    return;
+
 });
 
 router.post('/process', (req, res, next) => {
@@ -27,13 +46,13 @@ router.post('/process', (req, res, next) => {
     const writerName = req.body.writerName;
     console.log(req.files);
     let docSource;
-    if(req.files && req.files.docSource && req.files.docSource.data) {
+    if (req.files && req.files.docSource && req.files.docSource.data) {
         docSource = req.files.docSource.data.toString('utf-8');
     } else {
         docSource = req.body.docSourceText;
     }
     console.log(docSource);
-    const p = new Parser({});
+    const p = new RSTParser();
     const document = newDocument({ sourcePath: '' }, baseSettings);
     if(!docSource) {
 	res.setHeader('Content-type', 'text/plain');
@@ -42,9 +61,9 @@ router.post('/process', (req, res, next) => {
 	res.end();
 	return;
     }
-    const source = new ioModule.StringInput({source: docSource});
-    const destination = new ioModule.StringOutput({});
-    const pub = new core.Publisher({ source, destination, settings: baseSettings});
+    const source = new StringInput(docSource);
+    const destination = new StringOutput();
+    const pub = new Publisher({ source, destination, settings: baseSettings});
     pub.setComponents(readerName, parserName, writerName);
     return new Promise((resolve, reject) => {
         pub.publish({}, (error, ...args) => {
@@ -77,7 +96,7 @@ router.use('/doc-publish', (req, res, next) => {
 	    return;
 	}
 	const docSource = req.body[keys[0]];
-	const p = new Parser({});
+	const p = new RSTParser({});
 	const document = newDocument({ sourcePath: '' }, baseSettings);
 	if(!docSource) {
 	    res.setHeader('Content-type', 'text/plain');
@@ -88,7 +107,7 @@ router.use('/doc-publish', (req, res, next) => {
 	}
 
 	p.parse(docSource, document);
-	
+
 	res.setHeader('Content-type', 'text/xml');
 	res.writeHead(200);
 	res.write(document.toString());
