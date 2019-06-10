@@ -4,13 +4,14 @@
     <title>Upload RST Doc</title>
   </head>
   <body>
-    <h1>Process restructuredtext</h1>
-    <p>Choose a file or paste your reST into the textarea.</p>
+    <h1>Process reStructuredText</h1>
+    <p>Choose a file or paste your ReST into the textarea.</p>
     <form action="process" method="post" enctype="multipart/form-data">
       <p><input type="file" name="docSource">
       <select name="writerName">
         <option>xml</option>
         <option>html</option>
+        <option>pojo</option>
       </select></p>
       <p><textarea name="docSourceText" style="width: 60em; height: 30em;"></textarea></p>
     <input type="submit">
