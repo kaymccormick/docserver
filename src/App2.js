@@ -1,7 +1,9 @@
 
 import { getComponentForXmlSync } from 'docutils-react/lib/getComponentForXmlSax';
 import Modal from 'react-modal';
-import { defaults as baseSettings, Publisher, newDocument, StringInput, StringOutput } from 'docutils-js';
+import {
+ defaults as baseSettings, Publisher, newDocument, StringInput, StringOutput,
+} from 'docutils-js';
 import DocsViewer from './docs2';
 
 const React = require('react');
