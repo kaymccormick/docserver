@@ -1,14 +1,13 @@
-require('@babel/polyfill');
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const compression = require('compression');
-const docRouter = require('./routes/doc.js');
-const publishRouter = require('./routes/publish.js');
-var bodyParser = require('body-parser')
-var fileUpload = require('express-fileupload');
+import * as path from 'path';
+import createError from 'http-errors';
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import compression from 'compression';
+import docRouter from './routes/doc';
+//import * as publishRouter from './routes/publish';
+import bodyParser from 'body-parser';
+import fileUpload from 'express-fileupload';;
 
 const app = express();
 
@@ -28,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/doc-html', express.static(path.join(__dirname, 'doc-html')));
 app.use(compression({ filter: (req, res) => true }));
 app.use(docRouter);
-app.use(publishRouter);
+//app.use(publishRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -36,6 +35,7 @@ app.use((req, res, next) => {
 });
 
 // error handler
+// @ts-ignore
 app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;

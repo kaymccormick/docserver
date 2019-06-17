@@ -1,4 +1,3 @@
 import React from 'react';
 
-export default (props) => <div>hi</div>;//React.createElement('div');
-
+export default () => <div>hi</div>;

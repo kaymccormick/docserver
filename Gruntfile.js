@@ -52,7 +52,7 @@ module.exports = function(grunt) {
 		},
 	    },
 	    publish: {
-		src: ['lib/publish.js'],
+		src: ['lib/src/publish.js'],
 		dest: 'dist/pubbundle.js',
 		options: {
 		    debug: !prod,

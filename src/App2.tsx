@@ -18,7 +18,7 @@ const customStyles = {
 };
 
 
-export default class extends React.Component {
+export default class App2 extends React.Component {
   constructor() {
     super();
     this.state = {

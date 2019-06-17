@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Router } from 'express';
+import {Application, NextFunction, Router} from 'express';
 
 const router = Router();
 
@@ -12,7 +12,6 @@ import {
 
 const baseSettings = defaults;
 const docutilsServe = require('../middleware/docutilsServe');
-const App = require('../lib/App').default;
 
 const defaultArgs = {
   readerName: 'standalone',
@@ -21,24 +20,23 @@ const defaultArgs = {
   description: '',
   enableExitStatus: true,
 };
-
 router.get('/', (req, res, next) => {
   res.render('index', { 'formAction': '/process'});
 });
 
-router.get('/editor', (req, res, next) => {
+router.get('/editor', (req: Request, res, next) => {
   res.render('editor', { entry: '/editorbundle.js' });
 });
 
-router.get('/editor2', (req, res, next) => {
+router.get('/editor2', (req: Request, res, next) => {
   res.render('editor', { entry: '/editorbundle2.js' });
 });
 
-router.get('/upload', (req, res, next) => {
+router.get('/upload', (req: Request, res, next) => {
   res.render('upload');
 });
 
-router.post('/process', (req, res, next) => {
+router.post('/process', (req: Request, res, next) => {
   const { readerName, parserName } = defaultArgs;
   const { writerName } = req.body;
   let docSource;
@@ -89,7 +87,7 @@ router.use('/doc', docutilsServe({
   createAppElement: props => React.createElement(App, props),
 }));
 */
-router.use('/doc-publish', (req, res, next) => {
+router.use('/doc-publish', (req: Request, res, next) => {
   if (req.method === 'POST') {
     const keys = Object.keys(req.body);
     if (keys.length > 1) {
@@ -125,4 +123,5 @@ router.use('/doc-publish', (req, res, next) => {
 
 router.use('/doc-xml', express.static(docPath));
 
-module.exports = router;
+export default router;
+
