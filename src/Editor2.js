@@ -157,22 +157,23 @@ Another top-level paragraph.
       blocksFromHTML.entityMap,
     );
     this.state = { editorState: EditorState.createWithContent(state) };
-    return;
-    const reader = new Reader({ parseFn: parse });
-    const docSource = this.state.input;
-    const document = reader.read2(docSource, settings);
-    const writer = new Writer();
-    const destination = new StringOutput();
-    writer.write(document, destination);
 
-    const rawContent = {
-      entityMap: {},
-      blocks: writer.output,
-    };
-    const blocks = convertFromRaw(rawContent);
-    const editorState = EditorState.createWithContent(blocks/* , decorator */);
-    const rawContent2 = convertToRaw(editorState.getCurrentContent());
-    this.setState({ editorState, rawContent: rawContent2 });
+  //   const reader = new Reader({ parseFn: parse });
+  //   const docSource = this.state.input;
+  //   const document = reader.read2(docSource, settings);
+  //   const writer = new Writer();
+  //   const destination = new StringOutput();
+  //   writer.write(document, destination);
+  //
+  //   const rawContent = {
+  //     entityMap: {},
+  //     blocks: writer.output,
+  //   };
+  //   const blocks = convertFromRaw(rawContent);
+  //   const editorState = EditorState.createWithContent(blocks/* , decorator */);
+  //   const rawContent2 = convertToRaw(editorState.getCurrentContent());
+  //   this.setState({ editorState, rawContent: rawContent2 });
+  //
   }
 
   _handleInputChange(event) {

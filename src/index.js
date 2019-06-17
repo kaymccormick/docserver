@@ -3,6 +3,7 @@ require('@babel/polyfill');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const App = require('./App').default;
+// eslint-disable-next-line import/order
 const getComponentForXml = require('docutils-react/lib/getComponentForXmlSax').getComponentForXmlSync;
 
 const re = /^\/xml\/(.*)$/;

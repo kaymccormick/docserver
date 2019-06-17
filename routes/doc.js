@@ -27,7 +27,7 @@ const defaultArgs = {
 };
 
 router.get('/', (req, res, next) => {
-  res.render('index');
+  res.render('index', { 'formAction': '/process'});
 });
 
 router.get('/editor', (req, res, next) => {
@@ -45,14 +45,12 @@ router.get('/upload', (req, res, next) => {
 router.post('/process', (req, res, next) => {
   const { readerName, parserName } = defaultArgs;
   const { writerName } = req.body;
-  console.log(req.files);
   let docSource;
   if (req.files && req.files.docSource && req.files.docSource.data) {
     docSource = req.files.docSource.data.toString('utf-8');
   } else {
     docSource = req.body.docSourceText;
   }
-  console.log(docSource);
   const p = new RSTParser();
   const document = newDocument({ sourcePath: '' }, baseSettings);
   if (!docSource) {
