@@ -7,7 +7,7 @@ const App = require('./App').default;
 const getComponentForXml = require('docutils-react/lib/getComponentForXmlSax').getComponentForXmlSync;
 
 const re = /^\/xml\/(.*)$/;
-let docName;
+let docName: string;
 if (re.test(document.location.pathname)) {
   const result = re.exec(document.location.pathname);
   docName = result[1];

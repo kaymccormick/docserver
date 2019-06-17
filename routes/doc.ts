@@ -1,18 +1,14 @@
-const fs = require('fs');
-const express = require('express');
+import * as fs from 'fs';
+import * as path from 'path';
+import { Router } from 'express';
 
-const router = express.Router();
-
-const React = require('react');
-
-
-const path = require('path');
+const router = Router();
 
 const docPath = path.join(__dirname, '../doc-xml');
 
-const {
+import {
   RSTParser, parse, defaults, newDocument, StringInput, StringOutput, Publisher,
-} = require('docutils-js');
+} from 'docutils-js';
 
 const baseSettings = defaults;
 const docutilsServe = require('../middleware/docutilsServe');
@@ -46,11 +42,19 @@ router.post('/process', (req, res, next) => {
   const { readerName, parserName } = defaultArgs;
   const { writerName } = req.body;
   let docSource;
-  if (req.files && req.files.docSource && req.files.docSource.data) {
-    docSource = req.files.docSource.data.toString('utf-8');
+  let f ;
+  if(Object.prototype.hasOwnProperty.call(req, 'files')) {
+  const x = Object.getOwnPropertyDescriptor(req, 'files');
+  if(x !== undefined) {
+  f = x.value;
+  }
+}
+  if (f && f.docSource && f.docSource.data) {
+    docSource = f.docSource.data.toString('utf-8');
   } else {
     docSource = req.body.docSourceText;
   }
+
   const p = new RSTParser();
   const document = newDocument({ sourcePath: '' }, baseSettings);
   if (!docSource) {
@@ -79,11 +83,12 @@ router.post('/process', (req, res, next) => {
   });
 });
 
+/*
 router.use('/doc', docutilsServe({
   docPath,
   createAppElement: props => React.createElement(App, props),
 }));
-
+*/
 router.use('/doc-publish', (req, res, next) => {
   if (req.method === 'POST') {
     const keys = Object.keys(req.body);
