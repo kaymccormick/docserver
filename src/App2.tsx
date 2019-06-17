@@ -1,5 +1,4 @@
 
-import { getComponentForXmlSync } from 'docutils-react/lib/getComponentForXmlSax';
 import {
   defaults as baseSettings, Publisher, StringInput, StringOutput,
 } from 'docutils-js';
