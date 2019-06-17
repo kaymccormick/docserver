@@ -12,7 +12,7 @@ import fileUpload from 'express-fileupload';;
 const app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
@@ -21,10 +21,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(bodyParser.text({type: 'text/*'}));
-app.use(express.static(path.join(__dirname, 'dist')));
-app.use(express.static(path.join(__dirname, 'static')));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/doc-html', express.static(path.join(__dirname, 'doc-html')));
+app.use(express.static(path.join(__dirname, '../dist')));
+app.use(express.static(path.join(__dirname, '../static')));
+app.use(express.static(path.join(__dirname, '../public')));
+app.use('/doc-html', express.static(path.join(__dirname, '../doc-html')));
 app.use(compression({ filter: (req, res) => true }));
 app.use(docRouter);
 //app.use(publishRouter);
