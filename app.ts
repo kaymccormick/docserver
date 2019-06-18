@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import compression from 'compression';
 import docRouter from './routes/doc';
-//import * as publishRouter from './routes/publish';
+import siteRouter from './routes/site';
 import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';;
 
@@ -26,8 +26,8 @@ app.use(express.static(path.join(__dirname, '../static')));
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/doc-html', express.static(path.join(__dirname, '../doc-html')));
 app.use(compression({ filter: (req, res) => true }));
-app.use(docRouter);
-//app.use(publishRouter);
+app.use('/doc', docRouter);
+app.use(siteRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

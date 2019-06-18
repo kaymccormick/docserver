@@ -10,7 +10,15 @@
       <h1><%= title %></h1>
       </header>
     <main><p>Welcome to <%= title %></p>
-    <%- include('formStart') %>
+    <%- include('formStart', { formAction: '/doc/process' }) %>
+    <div class="main-form">
+      <label><span class="label">File Upload</span>
+	<%- include('formUpload', { fileUploadName: 'fileUpload' }) %>
+	</label>
+    </div>
+    <%- include('formEnd', { }) %>
+    <div id="app"><%- markup %></div>
     </main>
+    <script src="/indexbundle.js"></script>
   </body>
 </html>
