@@ -4,25 +4,12 @@ import {Application, NextFunction, Router} from 'express';
 
 const router = Router();
 
-const docPath = path.join(__dirname, '../doc-xml');
-
 import {
+  pojoTranslate, htmlTranslate,
   RSTParser, parse, defaults, newDocument, StringInput, StringOutput, Publisher,
 } from 'docutils-js';
 
 const baseSettings = defaults;
-//const docutilsServe = require('../middleware/docutilsServe');
-
-const defaultArgs = {
-  readerName: 'standalone',
-  parserName: 'restructuredtext',
-  usage: '',
-  description: '',
-  enableExitStatus: true,
-};
-router.get('/', (req, res, next) => {
-  res.render('index', { 'formAction': '/process'});
-});
 
 router.get('/editor', (req, res, next) => {
   res.render('editor', { entry: '/editorbundle.js' });
@@ -37,9 +24,8 @@ router.get('/upload', (req, res, next) => {
 });
 
 router.post('/process', (req, res, next) => {
-  const { readerName, parserName } = defaultArgs;
-  const { writerName } = req.body;
-  let docSource;
+const { writerName } = req.body
+let docSource;
   let f ;
   if(Object.prototype.hasOwnProperty.call(req, 'files')) {
   const x = Object.getOwnPropertyDescriptor(req, 'files');
@@ -53,8 +39,6 @@ router.post('/process', (req, res, next) => {
     docSource = req.body.docSourceText;
   }
 
-  const p = new RSTParser();
-  const document = newDocument({ sourcePath: '' }, baseSettings);
   if (!docSource) {
     res.setHeader('Content-type', 'text/plain');
     res.writeHead(400);
@@ -62,23 +46,21 @@ router.post('/process', (req, res, next) => {
     res.end();
     return;
   }
-  const source = new StringInput(docSource);
-  const destination = new StringOutput();
-  const pub = new Publisher({ source, destination, settings: baseSettings });
-  pub.setComponents(readerName, parserName, writerName);
-  return new Promise((resolve, reject) => {
-    pub.publish({}, (error, ...args) => {
-      if (error) {
-        reject(error);
-        return;
-      }
-      res.setHeader('Content-type', `text/${writerName}`);
-      res.writeHead(200);
-      res.write(destination.destination);
-      res.end();
-      resolve();
-    });
-  });
+  const document = parse(docSource);
+  let output:string = '';
+  let contentType:string = 'text/plain';
+  if(writerName === 'html') {
+    output = htmlTranslate(document);
+    contentType = 'text/html';
+    } else if(writerName === 'pojo') {
+    output = JSON.stringify(pojoTranslate(document), null, 4)
+    contentType = 'text/application-json';
+    }
+
+  res.setHeader('Content-type', contentType);
+  res.writeHead(200);
+  res.write(output);
+  res.end();
 });
 
 /*

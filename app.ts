@@ -23,6 +23,7 @@ app.use(cookieParser());
 app.use(bodyParser.text({type: 'text/*'}));
 app.use(express.static(path.join(__dirname, '../dist')));
 app.use(express.static(path.join(__dirname, '../static')));
+app.use(express.static(path.join(__dirname, '../build')));
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/doc-html', express.static(path.join(__dirname, '../doc-html')));
 app.use(compression({ filter: (req, res) => true }));

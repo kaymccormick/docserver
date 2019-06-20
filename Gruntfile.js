@@ -59,7 +59,7 @@ module.exports = function(grunt) {
 		},
 	    },
 	    editor: {
-		src: ['lib/editor.js'],
+		src: ['lib/src/editorEntry.js'],
 		dest: 'dist/editorbundle.js',
 		options: {
 		    debug: !prod,
