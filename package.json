@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "scripts": {
     "start": "node ./bin/www",
-    "compile": "tsc -p ."
+      "compile": "tsc -p .",
+      "docparse": "node lib/bin/docparse.js ../docutils-code/docutils/docs"
   },
   "dependencies": {
     "@babel/core": "^7.3.4",
