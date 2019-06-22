@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import compression from 'compression';
 import docRouter from './routes/doc';
+import mainRouter from './routes/main';
 import siteRouter from './routes/site';
 import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';;
@@ -21,13 +22,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(bodyParser.text({type: 'text/*'}));
-app.use(express.static(path.join(__dirname, '../dist')));
-app.use(express.static(path.join(__dirname, '../static')));
-app.use(express.static(path.join(__dirname, '../build')));
-app.use(express.static(path.join(__dirname, '../public')));
-app.use('/doc-html', express.static(path.join(__dirname, '../doc-html')));
+app.use(express.static(path.join(__dirname, '../../core/dist')));
 app.use(compression({ filter: (req, res) => true }));
 app.use('/doc', docRouter);
+app.use(mainRouter);
 app.use(siteRouter);
 
 // catch 404 and forward to error handler
