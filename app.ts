@@ -1,4 +1,5 @@
 import * as path from 'path';
+import fs from 'fs';
 import createError from 'http-errors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
@@ -22,7 +23,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(bodyParser.text({type: 'text/*'}));
-app.use(express.static(path.join(__dirname, '../../core/dist')));
+app.use(express.static(path.join(__dirname, '../../core/dist'))); // main bundle
+const distPath = path.join(__dirname, '../dist');
+const y = fs.statSync(distPath);
+if(!y || !y.isDirectory()) {
+throw new Error('invalid path dist');
+}
+app.use(express.static(distPath));
+app.use(express.static(path.join(__dirname, '../static')));
+app.use(express.static(path.join(__dirname, '../build')));
+app.use(express.static(path.join(__dirname, '../public')));
 app.use(compression({ filter: (req, res) => true }));
 app.use('/doc', docRouter);
 app.use(mainRouter);
