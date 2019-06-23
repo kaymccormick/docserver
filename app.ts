@@ -8,6 +8,7 @@ import compression from 'compression';
 import docRouter from './routes/doc';
 import mainRouter from './routes/main';
 import siteRouter from './routes/site';
+import classModelRouter from './routes/classModel';
 import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';;
 
@@ -35,6 +36,7 @@ app.use(express.static(path.join(__dirname, '../build')));
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(compression({ filter: (req, res) => true }));
 app.use('/doc', docRouter);
+app.use('/classModel', classModelRouter);
 app.use(mainRouter);
 app.use(siteRouter);
 
