@@ -1,1 +1,28 @@
 /*nothing */
+
+.mainViewLayout {
+    border: 1px solid black;
+}
+
+@mixin entity {
+    padding: 4px;
+    border-radius: 6px;
+    border: 1px solid black;
+    display: inline-block;
+    margin: .5em;
+    height: 1in;
+}
+
+.projects {
+    display: flex;
+}
+
+    
+.project {
+    @include entity;
+}
+
+.entityView__entity {
+    @include entity;
+}
+

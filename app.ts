@@ -10,6 +10,7 @@ import mainRouter from './routes/main';
 import siteRouter from './routes/site';
 import entityRouter from './routes/entity';
 import classModelRouter from './routes/classModel';
+import entityViewRouter from './routes/entityView';
 import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';;
 
@@ -39,6 +40,7 @@ app.use(compression({ filter: (req, res) => true }));
 app.use('/doc', docRouter);
 app.use('/entity', entityRouter);
 app.use('/classModel', classModelRouter);
+app.use('/entityView', entityViewRouter);
 app.use(mainRouter);
 app.use(siteRouter);
 

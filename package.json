@@ -25,6 +25,7 @@
     "@types/react": "^16.8.20",
     "@types/react-dom": "^16.8.4",
     "@types/react-json-tree": "^0.6.11",
+    "@types/react-router-dom": "^4.3.4",
     "arangojs": "^6.10.0",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
@@ -37,6 +38,7 @@
     "express": "~4.16.0",
     "express-fileupload": "^1.1.4",
     "grunt-contrib-watch": "^1.1.0",
+    "grunt-ts": "^6.0.0-beta.22",
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
     "livereload-js": "^2.4.0",
@@ -52,6 +54,7 @@
     "react-dom": "^16.8.4",
     "react-json-tree": "^0.11.2",
     "react-modal": "^3.8.1",
+    "react-router-dom": "^5.0.1",
     "react-rte": "^0.16.1",
     "react-star-rating": "^1.4.2",
     "reflect-metadata": "^0.1.13",
@@ -63,7 +66,8 @@
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "typeorm": "^0.2.18",
-    "typescript": "^3.5.2"
+    "typescript": "^3.5.2",
+    "uglifyify": "^5.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -87,6 +91,6 @@
     "jest": "^24.7.1",
     "jest-cli": "^24.7.1",
     "supertest": "^4.0.2",
-    "uglify-js": "^3.5.6"
+    "uglify-js": "^3.6.0"
   }
 }
