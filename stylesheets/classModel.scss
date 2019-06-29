@@ -1,16 +1,25 @@
 /*nothing */
+html, body {
+    height: 100%;
+}
+
+#app {
+    height: 100%;
+}
 
 .mainViewLayout {
     border: 1px solid black;
+    height: 100%;
 }
 
 @mixin entity {
+    opacity: .5;
     padding: 4px;
     border-radius: 6px;
     border: 1px solid black;
     display: inline-block;
     margin: .5em;
-    height: 1in;
+    height: 2in;
 }
 
 .projects {
@@ -26,3 +35,13 @@
     @include entity;
 }
 
+.canDrop {
+//    background-color: black;
+}
+.mainViewLayout {
+    display: flex;
+    flex-direction: column;
+}
+.mainView {
+    flex-grow: 1;
+}

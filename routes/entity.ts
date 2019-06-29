@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {createConnection} from '@enterprise-doc-server/core/lib/src/Factory';
 import { Module, Project } from 'classModel/lib/src/entity/core';
+import * as EntityCore from '@enterprise-doc-server/core/lib/entity/core';
 
 const router = Router();
 
@@ -10,6 +11,18 @@ router.get('/module(/:projectId)?', async (req, res, next) => {
             repository.find(req.params.projectId ? { project: { id: req.params.projectId } } : {}	).then(modules => {
 	    res.send(JSON.stringify({modules}));
 	    connection.close();
+            })
+  }).catch(error => {
+  res.render('error', { message: error.message, error });
+  });
+});
+
+
+router.get('/entity', async (req, res, next) => {
+  return createConnection().then(connection => {
+  const repository = connection.getRepository(EntityCore.Entity);
+            repository.find().then(entities => {
+	    res.send(JSON.stringify({entities}));
             })
   }).catch(error => {
   res.render('error', { message: error.message, error });
