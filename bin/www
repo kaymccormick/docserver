@@ -7,6 +7,7 @@
 var app = require('../lib/app');
 var debug = require('debug')('docserve:server');
 var http = require('http');
+var createConnection = require('@enterprise-doc-server/core/lib/src/Factory').createConnection;
 
 /**
  * Get port from environment and store in Express.
@@ -21,6 +22,8 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+createConnection().then(connection => {
+    app.set('connection', connection);
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -32,6 +35,7 @@ server.on('listening', onListening);
 /**
  * Normalize a port into a number, string, or false.
  */
+});
 
 function normalizePort(val) {
   var port = parseInt(val, 10);

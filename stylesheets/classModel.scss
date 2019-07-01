@@ -1,23 +1,39 @@
 /*nothing */
-html, body {
-    height: 100%;
-}
-
-#app {
-    height: 100%;
-}
+@import 'colors';
+@import 'app';
+@import 'node_modules/rc-tree/assets/index';
+@import 'node_modules/@progress/kendo-theme-default/dist/all';
 
 .mainViewLayout {
-    border: 1px solid black;
+/*    border: 1px solid black;*/
     height: 100%;
+    display: grid;
+    grid-template-columns: 8em auto;
+    grid-template-rows: 50px auto;
+}
+
+.toolbarContainer {
+    grid-column: 1 /3;
+    grid-row: 1;
+}
+
+.mainTreeContainer {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.mainViewContainer {
+    grid-column: 2;
+    grid-row: 2;
 }
 
 @mixin entity {
-    opacity: .5;
+/*    opacity: .5;*/
+    background-color: $color4;
     padding: 4px;
     border-radius: 6px;
     border: 1px solid black;
-    display: inline-block;
+/*    display: inline-block;*/
     margin: .5em;
     height: 2in;
 }
@@ -30,18 +46,43 @@ html, body {
 .project {
     @include entity;
 }
-
+.mainView {
+    height: 100%;
+}    
+.entityView {
+    border: 1px solid grey;
+    height: 100%;
+}
 .entityView__entity {
     @include entity;
 }
-
 .canDrop {
 //    background-color: black;
 }
-.mainViewLayout {
-    display: flex;
-    flex-direction: column;
+.entityView__entity {
+    display: grid;
+    grid-template-rows: max-content 1fr 1fr;
+    grid-template-columns: 80% 10% 10%;
 }
-.mainView {
-    flex-grow: 1;
+.addAttributeLink {
+    text-decoration: none;
+}
+.entity__displayName {
+    font-weight: bold;
+    text-decoration: underline;
+    grid-column: 1 / 4;
+}
+.entity__header {
+    font-weight: bold;
+    grid-column: 1 / 4;
+}
+.entity__description {
+    border: 1px solid gray;
+    grid-column: 1 / 4;
+}
+.entityView__draggableEntity {
+}
+.entity__outerGrid {
+    display: grid;
+    gridTemplateColumns: 100% 1px;
 }
