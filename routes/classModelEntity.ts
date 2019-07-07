@@ -1,40 +1,154 @@
 import { Router } from 'express';
 import { Module, Project } from 'classModel/lib/src/entity/core';
-import {EntityCore, TypeManager} from 'classModel';
-import { Connection } from 'typeorm';
+import {TypeManager} from 'classModel';
+import EntityCore from 'classModel/lib/src/entityCore';
+
+import { Connection, EntityMetadata } from 'typeorm';
+import { RelationMetadata } from 'typeorm/metadata/RelationMetadata';
 import{reconstructAst} from'../src/astUtils';
+import {Application} from '@enterprise-doc-server/core';
 
 const router = Router();
 
+router.get('/entity', (req, res, next) => {
+    const ary: any[] = [];
+    const app: Application = req.app.get('Application');
+    const defaultFilter = (e: EntityMetadata) => e.tableType === 'regular';
+    app.connection!.entityMetadatas.filter(defaultFilter)
+        .forEach((e: EntityMetadata) => {
+            const out = {};
+            Object.keys(e).forEach(k => {
+                // @ts-ignore
+                const  v = e[k];
+                if(typeof v !== 'object') {
+                    // @ts-ignore
+                    out[k] = v;
+                }
+            });
+            ary.push(out);
+        });
+    res.send(JSON.stringify({success: true, result: ary}));
+});
+
+router.get('/entity/:tableName', async (req, res, next) => {
+    const app = req.app.get('Application');
+    const metadata = app.connection!.getMetadata(req.params.tableName);
+    if(!metadata) {
+        next();
+
+
+    }
+
+    const relations: string[] = [];
+    metadata.ownRelations.forEach((rm: RelationMetadata) => {
+        if(rm.propertyName) {
+            relations.push(rm.propertyName);
+        }
+        console.log(rm.target);
+        console.log(rm.propertyName);
+        console.log(rm.type);
+
+    });
+
+    return app.connection!.getRepository(metadata.target).find({relations}).then((results: any[]) => {
+        res.send(JSON.stringify({success: true, results}));
+    });
+});
+
+router.post('/entity/:tableName/find', async (req, res, next) => {
+    const app = req.app.get('Application');
+    const metadata = app.connection!.getMetadata(req.params.tableName);
+    if(!metadata) {
+        next();
+    }
+
+    const where = req.body.where;
+
+    return app.connection!.getRepository(metadata.target).find({where}).then((results: any[]) => {
+        res.send(JSON.stringify({success: true, results}));
+    });
+});
+
+router.get('/entities', (req, res, next) => {
+    const ary: any[] = [];
+    const app: Application = req.app.get('Application');
+    app.connection!.entityMetadatas.forEach((e: EntityMetadata) => {
+        const out = {};
+        Object.keys(e).forEach(k => {
+            // @ts-ignore
+            const  v = e[k];
+            if(typeof v !== 'object') {
+                // @ts-ignore
+                out[k] = v;
+            }
+        });
+        ary.push(out);
+    });
+    res.send(JSON.stringify({success: true, result: ary}));
+});
+
+router.get('/project(/:relations)?',async (req, res, next) => {
+    const app: Application = req.app.get('Application');
+    const connection: Connection = app.connection!;
+    const repository = connection.getRepository(EntityCore.Project);
+    const relations = req.params.relations;
+    const o = {relations: relations ? relations.split(','):[]};
+    console.log(o);
+    return repository.find(o).then(projects => {
+        res.send(JSON.stringify({success: true, projects:projects.map(p => p.toPojo())}));
+    });
+});
+
+router.get('/class(/:moduleId)?', async (req, res, next) => {
+    const connection: Connection = req.app.get('connection');
+    const repository = connection.getRepository(EntityCore.Class);
+    return repository.find(req.params.moduleId ? { moduleId: req.params.moduleId } : {}).then((classes) => {
+        res.send(JSON.stringify({success: true, classes}));
+    });
+});
+
+router.get('/module(/:projectId)?', async (req, res, next) => {
+    const connection: Connection = req.app.get('connection');
+    const repository = connection.getRepository(Module);
+    return repository.find(req.params.projectId ? { project: { id: req.params.projectId } } : {}	).then((modules: Module[]) => {
+	    res.send(JSON.stringify({modules}));
+    });
+});
+
 router.post('/tstype', async (req, res, next) => {
-  const connection: Connection = req.app.get('connection');
-  const tm: TypeManager = req.app.get('typeManager');
-  const x = req.body.tstype;
-  const astNode = reconstructAst(x.astNode);
-  if(!x.origin) {
-  throw new Error('need origin');
-  }
-  return tm.createType(x.moduleId, astNode, x.origin).then(tstype => {
-  if(!tstype) {
-  throw new Error('undefined tstype');
-  }
-  console.log(`put ${JSON.stringify(tstype)}`);
-  res.send(JSON.stringify({success:true, tstype}));
+    const connection: Connection = req.app.get('connection');
+    const tm  = req.app.get('typeManager');
+    const logger  = req.app.get('logger');
+    logger.debug('test');
+    const x = req.body.tstype;
+    const astNode = reconstructAst(x.astNode);
+    if(!x.origin) {
+        throw new Error('need origin');
+    }
+    return tm.createType(x.moduleId, astNode, x.origin).then((tstype: EntityCore.TSType|undefined) => {
+        if(!tstype) {
+            throw new Error('undefined tstype');
+        }
+        res.send(JSON.stringify({success:true, tstype: tstype.toPojo()}));
     //  const ast= reconstructAst(req.body.tstype.astNode);
     }).catch((error: Error): void => {
-    res.send(JSON.stringify({success: false, error: error.message, stack: error.stack}));
+        res.send(JSON.stringify({success: false, error: error.message, stack: error.stack}));
     });
 });
 
 router.post('/tstype/find/:moduleId', async (req, res, next) => {
-  const connection: Connection = req.app.get('connection');
-  console.log(req.body);
-  const tm: TypeManager = req.app.get('typeManager');
-  const moduleId = req.params.moduleId;
-  const astNode = req.body.astNode;
-  return tm.findType(moduleId, astNode).then(tstype => {
-  res.send(JSON.stringify({tstype}));
-  });
-  });
+    const connection: Connection = req.app.get('connection');
+    const tm: TypeManager = req.app.get('typeManager');
+    const logger  = req.app.get('logger');
+    const moduleId = req.params.moduleId;
+    const astNode = req.body.astNode;
+    logger.info({operation: 'findType', astNode});
+    return tm.findType(moduleId, astNode).then(tstype => {
+        res.send(JSON.stringify({success: true, tstype: tstype ? tstype.toPojo() : undefined }));
+    }).catch((error: Error): void => {
+        res.send(JSON.stringify({success: false, error: error.message, stack: error.stack}));
+    });
+});
 
 export default router;
+

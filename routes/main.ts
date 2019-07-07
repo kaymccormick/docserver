@@ -6,6 +6,6 @@ import Main from '@enterprise-doc-server/core/lib/components/Main';
 const router = Router();
 
 router.get('/', (req, res, next) => {
-  res.render('main', { markup: ReactDOMServer.renderToStaticMarkup(React.createElement(Main)) });
+    res.render('main', { markup: ReactDOMServer.renderToStaticMarkup(React.createElement(Main)) });
 });
 export default router;

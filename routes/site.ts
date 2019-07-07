@@ -6,8 +6,8 @@ import React from 'react';
 const site = getSite();
 const router = Router();
 router.use('/', (req, res, next) => {
-  const markup = ReactDOMServer.renderToStaticMarkup(React.createElement(App))
-  res.render('index', { markup });
+    const markup = ReactDOMServer.renderToStaticMarkup(React.createElement(App))
+    res.render('index', { markup });
 });
 
 export default router;

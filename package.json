@@ -27,6 +27,7 @@
     "@types/react-dom": "^16.8.4",
     "@types/react-json-tree": "^0.6.11",
     "@types/react-router-dom": "^4.3.4",
+    "@typescript-eslint/eslint-plugin": "^1.11.0",
     "arangojs": "^6.10.0",
     "body-parser": "^1.18.3",
     "camelcase": "^5.3.1",
@@ -70,7 +71,9 @@
     "ts-node": "^8.3.0",
     "typeorm": "^0.2.18",
     "typescript": "^3.5.2",
-    "uglifyify": "^5.0.1"
+    "uglifyify": "^5.0.1",
+    "winston": "^3.2.1",
+    "winston-postgres": "^0.0.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",

@@ -8,7 +8,7 @@ import * as EntityCore from '@enterprise-doc-server/core/lib/entity/core';
 
 const router = Router();
 
-router.get('/', async (req, res, next) => {
+router.get('/*', async (req, res, next) => {
 /*
   return createConnection().then(connection => {
   const repository = connection.getRepository(EntityCore.Entity);
