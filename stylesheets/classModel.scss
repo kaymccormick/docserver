@@ -8,7 +8,7 @@
 /*    border: 1px solid black;*/
     height: 100%;
     display: grid;
-    grid-template-columns: 8em auto;
+    grid-template-columns: 20rem auto;
     grid-template-rows: 50px auto;
 }
 
@@ -92,3 +92,24 @@
     border: 1px inset grey;
 }
 
+.rc-tree {
+    background-color: #cccccc;
+    margin: 0px;
+    padding:0px;
+}
+.rc-tree-node-content-wrapper {
+    background-color: #cccccc;
+    width: 90%;
+    border: 1px inset grey;
+
+    margin: 0px;
+    padding:0px;
+}
+.rc-tree-switcher {
+        margin: 0px;
+    padding:0px;
+}
+.rc-tree-treenode-switcher-close {
+        margin: 0px;
+        padding:0px;
+}

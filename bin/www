@@ -9,9 +9,12 @@ var debug = require('debug')('docserve:server');
 var http = require('http');
 var winston = require('winston');
 
-const console = new winston.transports.Console();
-const fileTransport = new winston.transports.File({level: 'debug', filename: 'node.log'});
-const logger = winston.createLogger({ transports: [console, fileTransport] });
+const consoleTransport = new winston.transports.Console();
+const fileTransport = new winston.transports.File({level: 'debug',
+                                                   filename: 'node.log'});
+
+const logger = winston.createLogger({ transports: [consoleTransport,
+                                                   fileTransport] });
 
 const Application = require('@enterprise-doc-server/core').Application;
 const myApplication = new Application(logger);

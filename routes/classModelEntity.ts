@@ -3,20 +3,37 @@ import { Module, Project } from 'classModel/lib/src/entity/core';
 import {TypeManager} from 'classModel';
 import EntityCore from 'classModel/lib/src/entityCore';
 
-import { Connection, EntityMetadata } from 'typeorm';
+import { ServerModule as ClassModelModule } from '@enterprise-doc-server/core/lib/modules/classModel/ServerModule';
+
+import { Connection, EntityMetadata, } from 'typeorm';
 import { RelationMetadata } from 'typeorm/metadata/RelationMetadata';
+import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata';
 import{reconstructAst} from'../src/astUtils';
 import {Application} from '@enterprise-doc-server/core';
+import {EntityPojo,EntityColumnPojo} from '@enterprise-doc-server/core/lib/modules/entities/types';
 
 const router = Router();
 
+function basicCopy(o:any) {
+const out: { [a:string]: any} = {};
+            Object.keys(o).forEach(k => {
+                // @ts-ignore
+                const  v = o[k];
+                if(typeof v !== 'object') {
+                    // @ts-ignore
+                    out[k] = v;
+                }
+            });
+            return out;
+}
+
 router.get('/entity', (req, res, next) => {
-    const ary: any[] = [];
+    const ary: EntityPojo[] = [];
     const app: Application = req.app.get('Application');
     const defaultFilter = (e: EntityMetadata) => e.tableType === 'regular';
     app.connection!.entityMetadatas.filter(defaultFilter)
         .forEach((e: EntityMetadata) => {
-            const out = {};
+            const out: EntityPojo = {};
             Object.keys(e).forEach(k => {
                 // @ts-ignore
                 const  v = e[k];
@@ -25,8 +42,11 @@ router.get('/entity', (req, res, next) => {
                     out[k] = v;
                 }
             });
+            // @ts-ignore
             ary.push(out);
+            out.columns = e.ownColumns.map((c:ColumnMetadata): EntityColumnPojo => (basicCopy(c)));
         });
+        
     res.send(JSON.stringify({success: true, result: ary}));
 });
 
@@ -35,8 +55,6 @@ router.get('/entity/:tableName', async (req, res, next) => {
     const metadata = app.connection!.getMetadata(req.params.tableName);
     if(!metadata) {
         next();
-
-
     }
 
     const relations: string[] = [];
@@ -69,11 +87,11 @@ router.post('/entity/:tableName/find', async (req, res, next) => {
     });
 });
 
-router.get('/entities', (req, res, next) => {
-    const ary: any[] = [];
+/*router.get('/entities', (req, res, next) => {
+    const ary: EntityPojo[] = [];
     const app: Application = req.app.get('Application');
     app.connection!.entityMetadatas.forEach((e: EntityMetadata) => {
-        const out = {};
+        const out: EntityPojo = {};
         Object.keys(e).forEach(k => {
             // @ts-ignore
             const  v = e[k];
@@ -82,11 +100,13 @@ router.get('/entities', (req, res, next) => {
                 out[k] = v;
             }
         });
+        //@ts-ignore
+            out.columns = e.ownColumns.map((c:ColumnMetadata)=> ({ propertyName: c.propertyName, type: c.type }));
         ary.push(out);
     });
     res.send(JSON.stringify({success: true, result: ary}));
 });
-
+*/
 router.get('/project(/:relations)?',async (req, res, next) => {
     const app: Application = req.app.get('Application');
     const connection: Connection = app.connection!;
@@ -116,8 +136,10 @@ router.get('/module(/:projectId)?', async (req, res, next) => {
 });
 
 router.post('/tstype', async (req, res, next) => {
+    const app = req.app.get('Application');
+    const mod: ClassModelModule = app.getModule('classModel') as ClassModelModule;
     const connection: Connection = req.app.get('connection');
-    const tm  = req.app.get('typeManager');
+    const tm  = mod.typeManager;
     const logger  = req.app.get('logger');
     logger.debug('test');
     const x = req.body.tstype;
@@ -137,8 +159,11 @@ router.post('/tstype', async (req, res, next) => {
 });
 
 router.post('/tstype/find/:moduleId', async (req, res, next) => {
+    const app: Application = req.app.get('Application');
     const connection: Connection = req.app.get('connection');
-    const tm: TypeManager = req.app.get('typeManager');
+    const mod: ClassModelModule = app.getModule('classModel') as ClassModelModule;
+    const tm  = mod.typeManager;
+    
     const logger  = req.app.get('logger');
     const moduleId = req.params.moduleId;
     const astNode = req.body.astNode;
