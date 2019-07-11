@@ -6,7 +6,6 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import compression from 'compression';
 import docRouter from './routes/doc';
-import mainRouter from './routes/main';
 import siteRouter from './routes/site';
 import entityRouter from './routes/entity';
 import classModelEntityRouter from './routes/classModelEntity';
@@ -43,7 +42,6 @@ app.use('/entity', entityRouter);
 app.use('/cme', classModelEntityRouter);
 
 app.use('/entityView', entityViewRouter);
-app.use(mainRouter);
 app.use(siteRouter);
 
 // catch 404 and forward to error handler

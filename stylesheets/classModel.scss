@@ -1,8 +1,9 @@
 /*nothing */
 @import 'colors';
 @import 'app';
-@import 'node_modules/rc-tree/assets/index';
+/*@import 'node_modules/rc-tree/assets/index';*/
 @import 'node_modules/@progress/kendo-theme-default/dist/all';
+@import 'node_modules/react-metismenu/dist/react-metismenu-standart';
 
 .mainViewLayout {
 /*    border: 1px solid black;*/
@@ -92,6 +93,7 @@
     border: 1px inset grey;
 }
 
+/*
 .rc-tree {
     background-color: #cccccc;
     margin: 0px;
@@ -113,3 +115,4 @@
         margin: 0px;
         padding:0px;
 }
+*/
