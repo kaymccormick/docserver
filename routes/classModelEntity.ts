@@ -14,22 +14,23 @@ import {EntityPojo,EntityColumnPojo} from '@enterprise-doc-server/core/lib/modul
 
 const router = Router();
 
-function basicCopy(o:any) {
-const out: { [a:string]: any} = {};
-            Object.keys(o).forEach(k => {
-                // @ts-ignore
-                const  v = o[k];
-                if(typeof v !== 'object') {
-                    // @ts-ignore
-                    out[k] = v;
-                }
-            });
-            return out;
+function basicCopy(o: any) {
+    const out: { [a: string]: any} = {};
+    Object.keys(o).forEach(k => {
+        // @ts-ignore
+        const  v = o[k];
+        if(typeof v !== 'object') {
+            // @ts-ignore
+            out[k] = v;
+        }
+    });
+    return out;
 }
 
 router.get('/entity', (req, res, next) => {
     const ary: EntityPojo[] = [];
     const app: Application = req.app.get('Application');
+
     const defaultFilter = (e: EntityMetadata) => e.tableType === 'regular';
     app.connection!.entityMetadatas.filter(defaultFilter)
         .forEach((e: EntityMetadata) => {
@@ -44,7 +45,7 @@ router.get('/entity', (req, res, next) => {
             });
             // @ts-ignore
             ary.push(out);
-            out.columns = e.ownColumns.map((c:ColumnMetadata): EntityColumnPojo => (basicCopy(c)));
+            out.columns = e.ownColumns.map((c: ColumnMetadata): EntityColumnPojo => (basicCopy(c)));
         });
         
     res.send(JSON.stringify({success: true, result: ary}));
