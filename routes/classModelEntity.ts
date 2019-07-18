@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { Module, Project } from 'classModel/lib/src/entity/core';
 import {TypeManager} from 'classModel';
 import EntityCore from 'classModel/lib/src/entityCore';
+import { PromiseResult } from '@heptet/common';
 
 import { ServerModule as ClassModelModule } from '@enterprise-doc-server/core/lib/modules/classModel/ServerModule';
 
@@ -12,7 +13,8 @@ import{reconstructAst} from'../src/astUtils';
 import {Application} from '@enterprise-doc-server/core';
 import {EntityPojo,EntityColumnPojo} from '@enterprise-doc-server/core/lib/modules/entities/types';
 
-const router = Router();
+import expressPromiseRouter from 'express-promise-router';
+const router = expressPromiseRouter();
 
 function basicCopy(o: any) {
     const out: { [a: string]: any} = {};
@@ -26,6 +28,21 @@ function basicCopy(o: any) {
     });
     return out;
 }
+
+router.get('/getAll', (req, res, next) => {
+    const app: Application = req.app.get('Application');
+    const connection = app.connection!;
+    return Promise.all(connection.entityMetadatas.map((em): Promise<any> => {
+const repository = connection.getRepository(em.target);
+return repository.find().then((entities): any => {
+//@ts-ignore
+return { [em.targetName]: entities.map(e => e && e.toPojo ? e.toPojo() : e) };
+});
+})).then(results => {
+  const out = results.reduce((a, v) => Object.assign({}, a, v), {});
+  res.send(JSON.stringify({success: true, result: out}));
+  });
+  });
 
 router.get('/entity', (req, res, next) => {
     const ary: EntityPojo[] = [];
@@ -113,6 +130,7 @@ router.get('/project(/:relations)?',async (req, res, next) => {
     const connection: Connection = app.connection!;
     const repository = connection.getRepository(EntityCore.Project);
     const relations = req.params.relations;
+    // error check?
     const o = {relations: relations ? relations.split(','):[]};
     console.log(o);
     return repository.find(o).then(projects => {
@@ -148,11 +166,17 @@ router.post('/tstype', async (req, res, next) => {
     if(!x.origin) {
         throw new Error('need origin');
     }
-    return tm.createType(x.moduleId, astNode, x.origin).then((tstype: EntityCore.TSType|undefined) => {
-        if(!tstype) {
+    return tm.createType(x.moduleId, astNode, x.origin).then((tstyperesult: PromiseResult<EntityCore.TSType>) => {
+        if(!tstyperesult.hasResult) {
             throw new Error('undefined tstype');
         }
-        res.send(JSON.stringify({success:true, tstype: tstype.toPojo()}));
+        const tstype = tstyperesult.result;
+        if(tstype !== undefined) {
+        if(typeof tstype.toPojo  !== 'function') {
+        logger.error('no topojo on ${tstype}', { tstype});
+        }
+        }
+        res.send(JSON.stringify({success:true, tstype: tstyperesult.result!.toPojo()}));
     //  const ast= reconstructAst(req.body.tstype.astNode);
     }).catch((error: Error): void => {
         res.send(JSON.stringify({success: false, error: error.message, stack: error.stack}));
@@ -169,8 +193,8 @@ router.post('/tstype/find/:moduleId', async (req, res, next) => {
     const moduleId = req.params.moduleId;
     const astNode = req.body.astNode;
     logger.info({operation: 'findType', astNode});
-    return tm.findType(moduleId, astNode).then(tstype => {
-        res.send(JSON.stringify({success: true, tstype: tstype ? tstype.toPojo() : undefined }));
+    return tm.findType(moduleId, astNode).then(tstyperesult => {
+        res.send(JSON.stringify({success: tstyperesult.success, tstype: tstyperesult.hasResult ? tstyperesult.result!.toPojo() : undefined }));
     }).catch((error: Error): void => {
         res.send(JSON.stringify({success: false, error: error.message, stack: error.stack}));
     });
