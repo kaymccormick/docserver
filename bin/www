@@ -7,14 +7,8 @@
 var app = require('../lib/app');
 var debug = require('debug')('docserve:server');
 var http = require('http');
-var winston = require('winston');
 
-const consoleTransport = new winston.transports.Console();
-const fileTransport = new winston.transports.File({level: 'debug',
-                                                   filename: 'node.log'});
-
-const logger = winston.createLogger({ transports: [consoleTransport,
-                                                   fileTransport] });
+const logger = app.get('logger');
 
 const Application = require('@enterprise-doc-server/core').Application;
 const myApplication = new Application(logger);
@@ -36,6 +30,7 @@ var server = http.createServer(app);
 myApplication.init().then(() => {
     app.set('Application', myApplication);
     app.set('logger', logger);
+    
     app.set('connection', myApplication.connection);
 /**
  * Listen on provided port, on all network interfaces.

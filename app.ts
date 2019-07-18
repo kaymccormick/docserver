@@ -3,23 +3,31 @@ import fs from 'fs';
 import createError from 'http-errors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import logger from 'morgan';
 import compression from 'compression';
 import docRouter from './routes/doc';
 import siteRouter from './routes/site';
 import entityRouter from './routes/entity';
-import classModelEntityRouter from './routes/classModelEntity';
-import entityViewRouter from './routes/entityView';
+import appEndpointRouter from './routes/appEndpoint';
+import mainAppRouter from './routes/mainApp';
 import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';;
+import winston, { Logger } from 'winston';
+import expressWinston from 'express-winston';
 
 const app = express();
+
+const consoleTransport = new winston.transports.Console();
+const fileTransport = new winston.transports.File({level: 'debug',
+                                                   filename: 'node.log'});
+const logger = winston.createLogger({ transports: [consoleTransport,
+                                                   fileTransport] });
+
+app.set('logger', logger);
 
 // view engine setup
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
 
-app.use(logger('dev'));
 app.use(fileUpload({limits: 512 * 1024}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -36,12 +44,13 @@ app.use(express.static(path.join(__dirname, '../static')));
 app.use(express.static(path.join(__dirname, '../build')));
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(compression({ filter: (req, res) => true }));
+
+app.use(expressWinston.logger({winstonInstance: logger}));
+
+
 app.use('/doc', docRouter);
-app.use('/entity', entityRouter);
-
-app.use('/cme', classModelEntityRouter);
-
-app.use('/entityView', entityViewRouter);
+app.use('/cme', appEndpointRouter);
+app.use('/app', mainAppRouter);
 app.use(siteRouter);
 
 // catch 404 and forward to error handler
