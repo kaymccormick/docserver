@@ -6,10 +6,10 @@ const router = Router();
 
 import {
     pojoTranslate, htmlTranslate,
-    RSTParser, parse, defaults, newDocument, StringInput, StringOutput, Publisher,
+    RSTParser, parse, getDefaultSettings, newDocument, StringInput, StringOutput, Publisher,
 } from 'docutils-js';
 
-const baseSettings = defaults;
+const baseSettings = { ... getDefaultSettings() };
 
 router.get('/editor', (req, res, next) => {
     res.render('editor', { entry: '/editorbundle.js' });
@@ -46,7 +46,7 @@ router.post('/process', (req, res, next) => {
         res.end();
         return;
     }
-    const document = parse(docSource);
+    const document = parse(docSource, {});
     let output = '';
     let contentType = 'text/plain';
     if(writerName === 'html') {
@@ -70,6 +70,7 @@ router.use('/doc', docutilsServe({
 }));
 */
 router.use('/doc-publish', (req, res, next) => {
+    const logger  = req.app.get('logger');
     if (req.method === 'POST') {
         const keys = Object.keys(req.body);
         if (keys.length > 1) {
@@ -80,8 +81,8 @@ router.use('/doc-publish', (req, res, next) => {
             return;
         }
         const docSource = req.body[keys[0]];
-        const p = new RSTParser({});
-        const document = newDocument({ sourcePath: '' }, baseSettings);
+        const p = new RSTParser({ logger });
+        const document = newDocument({ sourcePath: '', logger }, baseSettings);
         if (!docSource) {
             res.setHeader('Content-type', 'text/plain');
             res.writeHead(400);

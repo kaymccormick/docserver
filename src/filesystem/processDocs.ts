@@ -12,7 +12,7 @@ const processDir = (dir: string, ...rest: any[]) => {
                 console.log(p);
                 const src = readFileSync(p, {encoding: 'utf-8'});
                 try {
-                    const document = parse(src);
+                    const document = parse(src, {});
                     //console.log(JSON.stringify(pojoTranslate(document)));
                 } catch (error) {
                     throw error;

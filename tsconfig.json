@@ -23,5 +23,5 @@
       "noImplicitAny" : true,
       "jsx" : "react"
    },
-    "exclude": ["../../../ast-types/**/*", "node_modules/**/*", "lib/**/*", "lib/*", "**/*.test.ts", "**/*.test.tsx"]
+    "exclude": ["../../../ast-types/**/*", "../core/node_modules/**/*", "node_modules/**/*", "lib/**/*", "lib/*", "**/*.test.ts", "**/*.test.tsx"]
 }

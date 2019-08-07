@@ -5,7 +5,7 @@ import Draft, {
   ContentState, Modifier, convertFromHTML, RichUtils, getDefaultKeyBinding, DraftEditorCommand, DraftHandleValue,
 } from 'draft-js';
 import {
-  StandaloneReader as Reader, defaults as settings, parse, StringOutput,
+  StandaloneReader as Reader, getDefaultSettings, parse, StringOutput,
 } from 'docutils-js';
 import JSONTree from 'react-json-tree';
 // @ts-ignore
@@ -191,7 +191,7 @@ Another top-level paragraph.
 
   //   const reader = new Reader({ parseFn: parse });
   //   const docSource = this.state.input;
-  //   const document = reader.read2(docSource, settings);
+  //   const document = reader.read2(docSource, getDefaultSettings());
   //   const writer = new Writer();
   //   const destination = new StringOutput();
   //   writer.write(document, destination);

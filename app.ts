@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import docRouter from './routes/doc';
 import siteRouter from './routes/site';
+import astRouter from './routes/ast';
 import entityRouter from './routes/entity';
 import appEndpointRouter from './routes/appEndpoint';
 import mainAppRouter from './routes/mainApp';
@@ -51,6 +52,7 @@ app.use(expressWinston.logger({winstonInstance: logger}));
 app.use('/doc', docRouter);
 app.use('/cme', appEndpointRouter);
 app.use('/app', mainAppRouter);
+app.use('/ast', astRouter);
 app.use(siteRouter);
 
 // catch 404 and forward to error handler
