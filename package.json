@@ -42,7 +42,7 @@
     "ejs": "^2.6.1",
     "exorcist": "^1.0.1",
     "express": "~4.16.0",
-    "express-fileupload": "^1.1.4",
+    "express-fileupload": "^1.1.9",
     "express-promise-router": "^3.0.3",
     "express-winston": "^3.2.1",
     "grunt-contrib-watch": "^1.1.0",
