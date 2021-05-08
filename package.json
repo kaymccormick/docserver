@@ -75,7 +75,7 @@
     "sqlite3": "^4.0.9",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
-    "typeorm": "^0.2.18",
+    "typeorm": "^0.2.25",
     "typescript": "^3.5.2",
     "uglifyify": "^5.0.1",
     "winston": "^3.2.1",
